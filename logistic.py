@@ -34,7 +34,7 @@ class Logistic():
     def gradient(self, theta, x, y):
         # Computes the gradient of the cost function at the point theta
         m = x.shape[0]
-        return (1 / m) * np.dot(x.T, self.sigmoid(self.net_input(theta, x)) - y)
+        return (1 / m) * np.dot(x.T, self.sigmoid(self.net_input(theta, x)) - y) + self.lamb * theta
     
     def flatten(t):
         t = t.reshape(1, -1)
@@ -58,7 +58,7 @@ class Logistic():
         min_lambda = 0
         
     
-        for lam in np.arange(0.1, 1, 0.1):
+        for lam in np.arange(0.1, 2, 0.1):
             self.lamb = lam
             error = 0
             epsilon = 0

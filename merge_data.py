@@ -18,33 +18,32 @@ from sklearn.decomposition import PCA
 script_location = os.path.dirname(__file__)
 batch_file_directory = os.path.join(script_location, 'batches')
 skin_data_directory = os.path.join(script_location, 'Skin_Data')
+breast_data_directory = os.path.join(script_location, 'Breast_Data')
 
-def merge():
+def merge_skin(batches):
 
     data = pd.read_csv(os.path.join(batch_file_directory, 'batch' + str(0) + '.csv'))
     d = data.values.shape[1]
     l = [i for i in range(d - 1)]
-#    l.extend(('Age','Male','Female','Label'))
     l.append('Label')
     features = [i for i in range(d - 1)]
-#    features.extend(('Age','Male','Female'))
     
     data = pd.read_csv(os.path.join(batch_file_directory, 'batch' + str(0) + '.csv'), names =l)
     x = data.loc[:, features].values
     y = data.loc[:,['Label']].values
     t0 = time.time()
 
-    for i in range(1,10):
+    for i in range(1,batches):
         data = pd.read_csv(os.path.join(batch_file_directory, 'batch' + str(i) + '.csv'), names =l)
         x1 = data.loc[:, features].values
         y1 = data.loc[:,['Label']].values
         x= np.append(x,x1, axis =0)
         y= np.append(y,y1, axis =0)
      
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=1/5.0, random_state=0)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=1/5.0, random_state=100)
     y_train = y_train.flatten()
     y_test = y_test.flatten()
-#    
+   
     scale = StandardScaler()
     print('X_Train before transformation {}'.format(x_train.shape))
     print('X_Test before transformation {}'.format(x_test.shape))
@@ -74,9 +73,9 @@ def merge():
     print('Time taken for merge = {} mins'.format(total/60))
     return x_train, x_test, y_train, y_test
 
-def get_data():
-    
-    l = [i for i in range(320)]
+def get_data_skin():
+    data = pd.read_csv(os.path.join(skin_data_directory, 'x_train.csv'))
+    l = [i for i in range(data.values.shape[1])]
     x_train = pd.read_csv(os.path.join(skin_data_directory, 'x_train.csv'), names =l)
     x_train = x_train.loc[:,:].values
     x_test = pd.read_csv(os.path.join(skin_data_directory, 'x_test.csv'), names =l)
@@ -88,11 +87,30 @@ def get_data():
     
     y_train = y_train.flatten()
     y_test = y_test.flatten()
-#    print(x_train.shape, x_test.shape, y_train.shape, y_test.shape)
     
     return x_train, x_test, y_train, y_test
     
+def create_breast_data():
 
-
-if __name__ == '__main__':
-    merge()
+    data = pd.read_csv(os.path.join(script_location, 'breast_cancer_data.csv'))
+    x = data.values[:, :-1]
+    y = data.values[:, -1]
+     
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=1/5.0, random_state=100)
+    y_train = y_train.flatten()
+    y_test = y_test.flatten()
+   
+    scale = StandardScaler()
+    scale.fit(x_train)
+    
+    x_train = scale.transform(x_train)
+    x_test = scale.transform(x_test)
+    
+    if not os.path.exists(breast_data_directory):
+        os.makedirs(breast_data_directory)
+    np.savetxt(os.path.join(breast_data_directory, 'x_train.csv'), x_train, delimiter = ",")
+    np.savetxt(os.path.join(breast_data_directory, 'x_test.csv'), x_test, delimiter = ",")
+    np.savetxt(os.path.join(breast_data_directory, 'y_train.csv'), y_train, delimiter = ",")
+    np.savetxt(os.path.join(breast_data_directory, 'y_test.csv'), y_test, delimiter = ",")    
+    
+    return x_train, x_test, y_train, y_test
