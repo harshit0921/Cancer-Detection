@@ -79,13 +79,13 @@ def merge():
 def get_data():
     
     l = [i for i in range(320)]
-    x_train = pd.read_csv(os.path.join(script_location, 'CNN_Data/x_train.csv'), names =l)
+    x_train = pd.read_csv(os.path.join(script_location, 'Skin_Data/x_train.csv'), names =l)
     x_train = x_train.loc[:,:].values
-    x_test = pd.read_csv(os.path.join(script_location, 'CNN_Data/x_test.csv'), names =l)
+    x_test = pd.read_csv(os.path.join(script_location, 'Skin_Data/x_test.csv'), names =l)
     x_test = x_test.loc[:,:].values
-    y_train = pd.read_csv(os.path.join(script_location, 'CNN_Data/y_train.csv'), names =['Label'])
+    y_train = pd.read_csv(os.path.join(script_location, 'Skin_Data/y_train.csv'), names =['Label'])
     y_train = y_train.loc[:,:].values
-    y_test = pd.read_csv(os.path.join(script_location, 'CNN_Data/y_test.csv'), names =['Label'])
+    y_test = pd.read_csv(os.path.join(script_location, 'Skin_Data/y_test.csv'), names =['Label'])
     y_test = y_test.loc[:,:].values
     
     y_train = y_train.flatten()
