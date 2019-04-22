@@ -11,19 +11,19 @@ from merge_data import merge
 from sklearn.preprocessing import StandardScaler
 from confusion_matrix import confusionMatrix
 
-l = [i for i in range(1415)]
-data = pd.read_csv('x_train.csv', names = l)
-x_train = data.values
-data = pd.read_csv('x_test.csv', names = l)
-x_test = data.values
+#l = [i for i in range(1415)]
+#data = pd.read_csv('x_train.csv', names = l)
+#x_train = data.values
+#data = pd.read_csv('x_test.csv', names = l)
+#x_test = data.values
+#
+#a=[5]
+#data = pd.read_csv('y_train.csv', names = a)
+#y_train = data.values.flatten()
+#data = pd.read_csv('y_test.csv', names = a)
+#y_test = data.values.flatten()
 
-a=[5]
-data = pd.read_csv('y_train.csv', names = a)
-y_train = data.values.flatten()
-data = pd.read_csv('y_test.csv', names = a)
-y_test = data.values.flatten()
-
-#x_train, x_test, y_train, y_test = merge()
+x_train, x_test, y_train, y_test = merge()
 
 logistic = Logistic(x_train, y_train)
 print(logistic.theta)
