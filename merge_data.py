@@ -18,8 +18,10 @@ from sklearn.decomposition import PCA
 script_location = os.path.dirname(__file__)
 batch_file_directory = os.path.join(script_location, 'batches')
 skin_data_directory = os.path.join(script_location, 'Skin_Data')
+breast_data_directory = os.path.join(script_location, 'Breast_Data')
 
-def merge(batches):
+
+def merge_skin(batches):
 
     data = pd.read_csv(os.path.join(batch_file_directory, 'batch' + str(0) + '.csv'))
     d = data.values.shape[1]
@@ -39,7 +41,7 @@ def merge(batches):
         x= np.append(x,x1, axis =0)
         y= np.append(y,y1, axis =0)
      
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=1/5.0, random_state=0)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=1/5.0, random_state=100)
     y_train = y_train.flatten()
     y_test = y_test.flatten()
    
@@ -72,8 +74,8 @@ def merge(batches):
     print('Time taken for merge = {} mins'.format(total/60))
     return x_train, x_test, y_train, y_test
 
-def get_data():
-    
+
+def get_data_skin():
     data = pd.read_csv(os.path.join(skin_data_directory, 'x_train.csv'))
     l = [i for i in range(data.values.shape[1])]
     x_train = pd.read_csv(os.path.join(skin_data_directory, 'x_train.csv'), names =l)
@@ -90,3 +92,27 @@ def get_data():
     
     return x_train, x_test, y_train, y_test
     
+def create_breast_data():
+
+    data = pd.read_csv(os.path.join(script_location, 'breast_cancer_data.csv'))
+    x = data.values[:, :-1]
+    y = data.values[:, -1]
+     
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=1/5.0, random_state=100)
+    y_train = y_train.flatten()
+    y_test = y_test.flatten()
+   
+    scale = StandardScaler()
+    scale.fit(x_train)
+    
+    x_train = scale.transform(x_train)
+    x_test = scale.transform(x_test)
+    
+    if not os.path.exists(breast_data_directory):
+        os.makedirs(breast_data_directory)
+    np.savetxt(os.path.join(breast_data_directory, 'x_train.csv'), x_train, delimiter = ",")
+    np.savetxt(os.path.join(breast_data_directory, 'x_test.csv'), x_test, delimiter = ",")
+    np.savetxt(os.path.join(breast_data_directory, 'y_train.csv'), y_train, delimiter = ",")
+    np.savetxt(os.path.join(breast_data_directory, 'y_test.csv'), y_test, delimiter = ",")    
+    
+    return x_train, x_test, y_train, y_test

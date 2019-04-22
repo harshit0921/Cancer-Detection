@@ -4,7 +4,7 @@ from PIL import Image
 import pandas as pd
 import os
 import math
-from merge_data import merge
+from merge_data import merge_skin
 
 script_location = os.path.dirname(__file__)
 
@@ -46,4 +46,5 @@ for j in range(batches):
     #Save the batch file
     np.savetxt(os.path.join(save_file_directory, 'batch' + str(j) + '.csv'), images.numpy(), delimiter = ",")
 
-merge(batches)
+
+merge_skin(batches)
