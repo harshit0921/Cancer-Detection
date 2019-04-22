@@ -19,22 +19,20 @@ script_location = os.path.dirname(__file__)
 batch_file_directory = os.path.join(script_location, 'batches')
 skin_data_directory = os.path.join(script_location, 'Skin_Data')
 
-def merge():
+def merge(batches):
 
     data = pd.read_csv(os.path.join(batch_file_directory, 'batch' + str(0) + '.csv'))
     d = data.values.shape[1]
     l = [i for i in range(d - 1)]
-#    l.extend(('Age','Male','Female','Label'))
     l.append('Label')
     features = [i for i in range(d - 1)]
-#    features.extend(('Age','Male','Female'))
     
     data = pd.read_csv(os.path.join(batch_file_directory, 'batch' + str(0) + '.csv'), names =l)
     x = data.loc[:, features].values
     y = data.loc[:,['Label']].values
     t0 = time.time()
 
-    for i in range(1,10):
+    for i in range(1,batches):
         data = pd.read_csv(os.path.join(batch_file_directory, 'batch' + str(i) + '.csv'), names =l)
         x1 = data.loc[:, features].values
         y1 = data.loc[:,['Label']].values
@@ -44,7 +42,7 @@ def merge():
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=1/5.0, random_state=0)
     y_train = y_train.flatten()
     y_test = y_test.flatten()
-#    
+   
     scale = StandardScaler()
     print('X_Train before transformation {}'.format(x_train.shape))
     print('X_Test before transformation {}'.format(x_test.shape))
@@ -76,7 +74,8 @@ def merge():
 
 def get_data():
     
-    l = [i for i in range(320)]
+    data = pd.read_csv(os.path.join(skin_data_directory, 'x_train.csv'))
+    l = [i for i in range(data.values.shape[1])]
     x_train = pd.read_csv(os.path.join(skin_data_directory, 'x_train.csv'), names =l)
     x_train = x_train.loc[:,:].values
     x_test = pd.read_csv(os.path.join(skin_data_directory, 'x_test.csv'), names =l)
@@ -88,11 +87,6 @@ def get_data():
     
     y_train = y_train.flatten()
     y_test = y_test.flatten()
-#    print(x_train.shape, x_test.shape, y_train.shape, y_test.shape)
     
     return x_train, x_test, y_train, y_test
     
-
-
-if __name__ == '__main__':
-    merge()
