@@ -6,7 +6,7 @@ Created on Sat Apr 20 00:50:31 2019
 @author: shivamodeka
 """
 
-from merge_data import merge
+from merge_data import get_data
 import torch
 import torch.nn.functional as F
 from torch import autograd, optim, nn
@@ -86,11 +86,11 @@ def RunNN(n, Sl, X_train, y_train, X_test, y_test, activation_func):
     
     
 def main():
-    x_train, x_test, y_train, y_test = merge()
+    x_train, x_test, y_train, y_test = get_data()
     d = x_train.shape[1]
-    act_func = ['sigmoid']
+    act_func = ['relu']
 #    act_func = ['identity', 'sigmoid', 'tanh', 'relu']
-    Sl = [d, 50, 2]
+    Sl = [d, 100, 2]
     for func in act_func:
         print("{} activation function:".format(func))
         print(Sl)
