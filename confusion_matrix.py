@@ -16,6 +16,7 @@ def confusionMatrix(target, predicted):
                 xticklabels=target_names, yticklabels=target_names)
     plt.xlabel('True Label')
     plt.ylabel('Predicted Label')
+    plt.title('Confusion Matrix')
     plt.show()
     TP = matrix[1][1]
     TN = matrix[0][0]

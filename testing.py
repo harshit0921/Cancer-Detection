@@ -9,7 +9,9 @@ import numpy as np
 import pandas as pd
 from merge_data import merge_skin, get_data_skin, create_breast_data
 from sklearn.preprocessing import StandardScaler
+from sklearn import svm
 from confusion_matrix import confusionMatrix
+from svm import SVM
 
 #l = [i for i in range(1415)]
 #data = pd.read_csv('x_train.csv', names = l)
@@ -24,8 +26,8 @@ from confusion_matrix import confusionMatrix
 #y_test = data.values.flatten()
 
 #x_train, x_test, y_train, y_test = merge_skin(10)
-##x_train, x_test, y_train, y_test = get_data_skin()
-#
+#x_train, x_test, y_train, y_test = get_data_skin()
+
 #logistic = Logistic(x_train, y_train)
 #print(logistic.theta)
 #y_pred = logistic.predict(x_train)
@@ -49,3 +51,25 @@ print("\nTesting Classification accuracy: ")
 print(100 - 100*np.sum(np.abs(y_pred - y_test))/y_pred.shape[0])
 
 confusionMatrix(y_test, y_pred)
+
+
+#x_train, x_test, y_train, y_test = get_data_skin()
+##Create a svm Classifier
+#clf = svm.SVC(kernel='linear') # Linear Kernel
+#
+##Train the model using the training sets
+#clf.fit(x_train, y_train)
+#
+##Predict the response for test dataset
+#y_pred = clf.predict(x_train)
+##svm = SVM(x_train, np.where(y_train==0, -1, y_train), 100, 0.01)
+##svm.main_routine(5)
+##print('b is {}'.format(svm.b))
+##print('w is {}'.format(svm.w))
+#print("\nTraining Classification accuracy: ")
+#print(100 - 100*np.sum(np.abs(y_pred - y_train))/y_pred.shape[0])
+#confusionMatrix(y_train, y_pred)
+#y_pred = clf.predict(x_test)
+#print("\nTesting Classification accuracy: ")
+#print(100 - 100*np.sum(np.abs(y_pred - y_test))/y_pred.shape[0])
+#confusionMatrix(y_test, y_pred)
