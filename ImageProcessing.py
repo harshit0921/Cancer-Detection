@@ -21,6 +21,10 @@ batch_size = int(math.ceil(len(data['Name'])/batches))
 
 #Create array to store pixel values of a batch (N x d)
 images = torch.zeros(batch_size, pixels+4)
+
+directory = os.path.join(script_location, 'batches')
+if not os.path.exists(directory):
+    os.makedirs(directory)
 save_file_directory = os.path.join(script_location, 'batches')
 #For each batch
 for j in range(batches):

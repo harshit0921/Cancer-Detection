@@ -17,10 +17,12 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA 
 
 script_location = os.path.dirname(__file__)
+data = pd.read_csv(os.path.join(script_location, 'batches/batch' + str(0) + '.csv'))
+print(data.values.shape)
 
 def merge():
 
-    
+    data = pd.read_csv(os.path.join(script_location, 'batches_cnn/batch' + str(0) + '.csv'))
     l = [i for i in range(7500)]
 #    l.extend(('Age','Male','Female','Label'))
     l.append('Label')
