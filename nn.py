@@ -6,13 +6,14 @@ Created on Sat Apr 20 00:50:31 2019
 @author: shivamodeka
 """
 
-from merge_data import get_data
+from merge_data import create_breast_data
 import torch
 import torch.nn.functional as F
 from torch import autograd, optim, nn
 import torch.utils.data
+from confusion_matrix import confusionMatrix
 
-max_epochs = 10000
+max_epochs = 1000
 
 
 class NeuralNetwork(nn.Module):
@@ -58,6 +59,7 @@ class NeuralNetwork(nn.Module):
             loss.backward()
             opt.step()
         FP = (predict - y_target).nonzero().shape[0]
+        confusionMatrix(y_target, predict)
         print("Training Classification Error: {:.2f}".format(FP/y_target.shape[0]))
         
         if (self.n == 3):
@@ -76,6 +78,7 @@ class NeuralNetwork(nn.Module):
         
         prediction = y_output.max(1)[1]
         FP = (prediction - y_target).nonzero().shape[0]
+        confusionMatrix(y_target, prediction)
         print("Test Classification Error: {:.2f}\n".format(FP/(y_target.shape[0])))
         
         
@@ -86,11 +89,15 @@ def RunNN(n, Sl, X_train, y_train, X_test, y_test, activation_func):
     
     
 def main():
-    x_train, x_test, y_train, y_test = get_data()
+    x_train, x_test, y_train, y_test = create_breast_data()
+    x_train = torch.tensor(x_train, dtype = torch.float32)
+    x_test = torch.tensor(x_test, dtype = torch.float32) 
+    y_train = torch.tensor(y_train, dtype = torch.float32)
+    y_test = torch.tensor(y_test, dtype = torch.float32) 
     d = x_train.shape[1]
     act_func = ['relu']
 #    act_func = ['identity', 'sigmoid', 'tanh', 'relu']
-    Sl = [d, 100, 2]
+    Sl = [d, 10, 2]
     for func in act_func:
         print("{} activation function:".format(func))
         print(Sl)

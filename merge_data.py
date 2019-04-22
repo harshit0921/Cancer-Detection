@@ -19,6 +19,7 @@ batch_file_directory = os.path.join(script_location, 'batches')
 skin_data_directory = os.path.join(script_location, 'Skin_Data')
 breast_data_directory = os.path.join(script_location, 'Breast_Data')
 
+
 def merge_skin(batches):
 
     data = pd.read_csv(os.path.join(batch_file_directory, 'batch' + str(0) + '.csv'))
@@ -71,6 +72,7 @@ def merge_skin(batches):
     total = t1-t0
     print('Time taken for merge = {} mins'.format(total/60))
     return x_train, x_test, y_train, y_test
+
 
 def get_data_skin():
     data = pd.read_csv(os.path.join(skin_data_directory, 'x_train.csv'))

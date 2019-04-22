@@ -46,4 +46,5 @@ for j in range(batches):
     #Save the batch file
     np.savetxt(os.path.join(save_file_directory, 'batch' + str(j) + '.csv'), images.numpy(), delimiter = ",")
 
+
 merge_skin(batches)
