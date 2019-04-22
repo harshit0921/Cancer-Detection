@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from logistic import Logistic
 import numpy as np
 import pandas as pd
-from merge_data import merge
+from merge_data import merge_skin, get_data_skin, create_breast_data
 from sklearn.preprocessing import StandardScaler
 from confusion_matrix import confusionMatrix
 
@@ -23,31 +23,29 @@ from confusion_matrix import confusionMatrix
 #data = pd.read_csv('y_test.csv', names = a)
 #y_test = data.values.flatten()
 
-x_train, x_test, y_train, y_test = merge()
-
-logistic = Logistic(x_train, y_train)
-print(logistic.theta)
-y_pred = logistic.predict(x_train)
-print("\nTraining Classification accuracy: ")
-print(100 - 100*np.sum(np.abs(y_pred - y_train))/y_pred.shape[0])
-y_pred = logistic.predict(x_test)
-print("\nTesting Classification accuracy: ")
-print(100 - 100*np.sum(np.abs(y_pred - y_test))/y_pred.shape[0])
-
-
-#table = pd.read_csv('breast_cancer_data.csv')
-#train_range = int(table.values.shape[0] * 0.8)
-#x_train = StandardScaler().fit_transform(table.values[0:train_range, :-1])
-#y_train = table.values[0:train_range, -1]
-#x_test = StandardScaler().fit_transform(table.values[train_range:table.values.shape[0], :-1] )
-#y_test = table.values[train_range:table.values.shape[0], -1]
+#x_train, x_test, y_train, y_test = merge_skin(10)
+##x_train, x_test, y_train, y_test = get_data_skin()
+#
 #logistic = Logistic(x_train, y_train)
 #print(logistic.theta)
 #y_pred = logistic.predict(x_train)
 #print("\nTraining Classification accuracy: ")
 #print(100 - 100*np.sum(np.abs(y_pred - y_train))/y_pred.shape[0])
+#confusionMatrix(y_train, y_pred)
 #y_pred = logistic.predict(x_test)
 #print("\nTesting Classification accuracy: ")
 #print(100 - 100*np.sum(np.abs(y_pred - y_test))/y_pred.shape[0])
+
+
+x_train, x_test, y_train, y_test = create_breast_data()
+logistic = Logistic(x_train, y_train)
+print(logistic.theta)
+y_pred = logistic.predict(x_train)
+print("\nTraining Classification accuracy: ")
+print(100 - 100*np.sum(np.abs(y_pred - y_train))/y_pred.shape[0])
+confusionMatrix(y_train, y_pred)
+y_pred = logistic.predict(x_test)
+print("\nTesting Classification accuracy: ")
+print(100 - 100*np.sum(np.abs(y_pred - y_test))/y_pred.shape[0])
 
 confusionMatrix(y_test, y_pred)
