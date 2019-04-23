@@ -4,6 +4,8 @@ from merge_data import get_data_skin, create_breast_data
 from confusion_matrix import confusionMatrix
 from svm import SVM
 from ROC import plot_roc_curve
+from nn import neural_net
+from cnn import cnn
 
 def logistic_breast():
     print("\nLogistic Regression for Breast Cancer data:\n")
@@ -34,6 +36,18 @@ def logistic_skin():
     confusionMatrix(y_test, y_pred)
     print("ROC Curve: ")
     plot_roc_curve(y_test, y_pred)
+    
+def nn_breast():
+    print("\nFeed-forward Neural Nets for Breast Cancer:\n")
+    neural_net()
+    
+def nn_skin():
+    print("\nFeed-forward Neural Nets for Skin Cancer:\n")
+    neural_net('skin')
+    
+def cnn_skin():
+    print("\nConvolutional Neural Nets for Skin Cancer:\n")
+    cnn()
 
 def svm_breast():
     print("\nSVM Classification for Breast Cancer data:\n")
@@ -68,6 +82,9 @@ def svm_skin():
 def main():
     logistic_breast()
     logistic_skin()
+    nn_breast()
+    nn_skin()
+    cnn_skin()
     svm_breast()
     svm_skin()
     

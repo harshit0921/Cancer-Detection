@@ -12,6 +12,7 @@ import torch.nn.functional as F
 from torch import autograd, optim, nn
 import torch.utils.data
 from confusion_matrix import confusionMatrix
+from ROC import plot_roc_curve
 
 max_epochs = 5000
 
@@ -33,7 +34,7 @@ class NeuralNetwork(nn.Module):
         if (n == 5):
             self.fc4 = nn.Linear(in_features = Sl[3], out_features = Sl[4])
             self.layers.append(self.fc4)
-        self.act_func = self.functions[activation_function]
+        self.act_func = self.functions[activation_function.lower()]
         
         
     def forward(self, x):
@@ -60,14 +61,11 @@ class NeuralNetwork(nn.Module):
             opt.step()
         FP = (predict - y_target).nonzero().shape[0]
         
-        print("Feed-Forward NN Training Classification Accuracy: {:.2f}%".format((1-FP/y_target.shape[0])*100))
+        print("\nFeed-Forward NN Training Classification Accuracy: {:.2f}%".format((1-FP/y_target.shape[0])*100))
         confusionMatrix(y_target, predict)
-        if (self.n == 3):
-            return self.fc1.weight, self.fc2.weight, self.fc1.bias, self.fc2.bias, output
-        else:
-            return self.fc1.weight, self.fc2.weight, self.fc3.weight,
-            self.fc1.bias, self.fc2.bias, self.fc3.bias, output
-        
+        print("ROC Curve: ")
+        plot_roc_curve(y_target, predict)
+
     
     def predict(self, X_test, y_test):
         X_input = autograd.Variable(X_test)
@@ -79,8 +77,10 @@ class NeuralNetwork(nn.Module):
         prediction = y_output.max(1)[1]
         FP = (prediction - y_target).nonzero().shape[0]
         
-        print("Feed-Forward NN Test Classification Accuracy: {:.2f}%\n".format((1-FP/(y_target.shape[0]))*100))
+        print("\nFeed-Forward NN Test Classification Accuracy: {:.2f}%\n".format((1-FP/(y_target.shape[0]))*100))
         confusionMatrix(y_target, prediction)
+        print("ROC Curve: ")
+        plot_roc_curve(y_target, prediction)
         
 def RunNN(n, Sl, X_train, y_train, X_test, y_test, activation_func):
     network = NeuralNetwork(n, Sl = Sl, activation_function = activation_func)
@@ -88,20 +88,21 @@ def RunNN(n, Sl, X_train, y_train, X_test, y_test, activation_func):
     network.predict(X_test, y_test)
     
     
-def main():
-    x_train, x_test, y_train, y_test = get_data_skin()
+def neural_net(data = 'breast'):
+    if data == 'skin':
+        x_train, x_test, y_train, y_test = get_data_skin()
+    else:
+        x_train, x_test, y_train, y_test = create_breast_data()
     x_train = torch.tensor(x_train, dtype = torch.float32)
     x_test = torch.tensor(x_test, dtype = torch.float32) 
     y_train = torch.tensor(y_train, dtype = torch.float32)
     y_test = torch.tensor(y_test, dtype = torch.float32) 
     d = x_train.shape[1]
     act_func = ['relu']
-#    act_func = ['identity', 'sigmoid', 'tanh', 'relu']
-    Sl = [d, 100, 50, 2]
+    Sl = [d, 100, 2]
     for func in act_func:
-        print("{} activation function:".format(func))
-        print(Sl)
+        print("\n{} activation function:".format(func))
         RunNN(len(Sl), Sl, x_train, y_train, x_test, y_test, func)
         
 if __name__ == '__main__':
-    main()
+    neural_net()

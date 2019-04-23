@@ -20,7 +20,7 @@ def cnn_model_fn(features, labels, mode):
   # Convolutional Layer #1
   conv1 = tf.layers.conv2d(
       inputs=input_layer,
-      filters=32,
+      filters=5,
       kernel_size=[5, 5],
       padding="same",
       activation=tf.nn.relu)
@@ -31,7 +31,7 @@ def cnn_model_fn(features, labels, mode):
   # Convolutional Layer #2 and Pooling Layer #2
   conv2 = tf.layers.conv2d(
       inputs=pool1,
-      filters=64,
+      filters=10,
       kernel_size=[5, 5],
       padding="same",
       activation=tf.nn.relu)
@@ -39,10 +39,10 @@ def cnn_model_fn(features, labels, mode):
 
   # Dense Layer
 
-  pool2_flat = tf.reshape(pool2, [-1, 25 * 18 * 64])
-  dense = tf.layers.dense(inputs=pool2_flat, units=1024, activation=tf.nn.relu)
+  pool2_flat = tf.reshape(pool2, [-1, 25 * 18 * 10])
+  dense = tf.layers.dense(inputs=pool2_flat, units=2048, activation=tf.nn.relu)
   dropout = tf.layers.dropout(
-      inputs=dense, rate=0.4, training=mode == tf.estimator.ModeKeys.TRAIN)
+      inputs=dense, rate=0.1, training=mode == tf.estimator.ModeKeys.TRAIN)
 
   # Logits Layer
   logits = tf.layers.dense(inputs=dropout, units=2)
@@ -79,9 +79,9 @@ def cnn_model_fn(features, labels, mode):
   return tf.estimator.EstimatorSpec(
       mode=mode, loss=loss, eval_metric_ops=eval_metric_ops)
   
-def main():
+def cnn():
   
-    x_train, x_test, y_train, y_test = get_data_skin(data = 'cnn')
+    x_train, x_test, y_train, y_test = get_data_skin(model = 'cnn')
     
     x_train = x_train/np.float32(255)
     y_train = y_train.astype(np.int32)
@@ -132,4 +132,4 @@ def main():
     
     
 if __name__ == '__main__':
-    main()
+    cnn()

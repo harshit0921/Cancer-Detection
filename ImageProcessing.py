@@ -4,12 +4,12 @@ from PIL import Image
 import pandas as pd
 import os
 import math
-from merge_data import merge_skin
+from merge_data import merge_skin_data
 
 script_location = os.path.dirname(__file__)
 
 #Read csv
-data = pd.read_csv(os.path.join(script_location, 'SKIN_CANCER_metadata.csv'))
+data = pd.read_csv(os.path.join(script_location, 'SKIN_CANCER_metadata_mini.csv'))
 
 ##Read an image to get resolution
 image_directory = os.path.join(script_location, 'HAM10000')
@@ -47,4 +47,4 @@ for j in range(batches):
     np.savetxt(os.path.join(save_file_directory, 'batch' + str(j) + '.csv'), images.numpy(), delimiter = ",")
 
 
-merge_skin(batches)
+merge_skin_data(batches)
