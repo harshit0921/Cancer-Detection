@@ -4,13 +4,13 @@ from sklearn.model_selection import KFold
 
 class Logistic():
     def __init__(self, x_train, y_train):
-        print("Training data in Logistic Regression\n")
+        print("Training data in Logistic Regression")
         self.Xtrain = np.concatenate((np.ones((x_train.shape[0], 1)), x_train), axis = 1)
         self.ytrain = y_train[:, np.newaxis]
         self.theta = np.zeros((self.Xtrain.shape[1], 1))
-        print("Performing K Fold Cross Validation\n")
+        print("Performing K Fold Cross Validation")
         self.lamb = self.k_fold_cross_validation(self.Xtrain, self.ytrain, 10)
-        print("K Fold cross validation complete\n")
+        print("K Fold cross validation complete")
         self.theta = self.fit(self.Xtrain, self.ytrain, self.theta)
         
     def sigmoid(self, x):
@@ -58,7 +58,7 @@ class Logistic():
         min_lambda = 0
         
     
-        for lam in np.arange(0.1, 2, 0.1):
+        for lam in np.arange(0.1, 1, 0.1):
             self.lamb = lam
             error = 0
             epsilon = 0
@@ -73,7 +73,6 @@ class Logistic():
                 error += self.cost_function(theeta, Dx_tst, Dy_tst)
                 
             epsilon = error/K
-            print("Error = {} for lambda = {}".format(epsilon, lam))
             
             #Get lambda and theeta for minimum error
             if(epsilon < min_lambda_error):
