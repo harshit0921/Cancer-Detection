@@ -6,14 +6,14 @@ Created on Sat Apr 20 00:50:31 2019
 @author: shivamodeka
 """
 
-from merge_data import create_breast_data
+from merge_data import create_breast_data, get_data_skin
 import torch
 import torch.nn.functional as F
 from torch import autograd, optim, nn
 import torch.utils.data
 from confusion_matrix import confusionMatrix
 
-max_epochs = 1000
+max_epochs = 5000
 
 
 class NeuralNetwork(nn.Module):
@@ -59,9 +59,9 @@ class NeuralNetwork(nn.Module):
             loss.backward()
             opt.step()
         FP = (predict - y_target).nonzero().shape[0]
-        confusionMatrix(y_target, predict)
-        print("Training Classification Error: {:.2f}".format(FP/y_target.shape[0]))
         
+        print("Feed-Forward NN Training Classification Accuracy: {:.2f}%".format((1-FP/y_target.shape[0])*100))
+        confusionMatrix(y_target, predict)
         if (self.n == 3):
             return self.fc1.weight, self.fc2.weight, self.fc1.bias, self.fc2.bias, output
         else:
@@ -78,9 +78,9 @@ class NeuralNetwork(nn.Module):
         
         prediction = y_output.max(1)[1]
         FP = (prediction - y_target).nonzero().shape[0]
-        confusionMatrix(y_target, prediction)
-        print("Test Classification Error: {:.2f}\n".format(FP/(y_target.shape[0])))
         
+        print("Feed-Forward NN Test Classification Accuracy: {:.2f}%\n".format((1-FP/(y_target.shape[0]))*100))
+        confusionMatrix(y_target, prediction)
         
 def RunNN(n, Sl, X_train, y_train, X_test, y_test, activation_func):
     network = NeuralNetwork(n, Sl = Sl, activation_function = activation_func)
@@ -89,7 +89,7 @@ def RunNN(n, Sl, X_train, y_train, X_test, y_test, activation_func):
     
     
 def main():
-    x_train, x_test, y_train, y_test = create_breast_data()
+    x_train, x_test, y_train, y_test = get_data_skin()
     x_train = torch.tensor(x_train, dtype = torch.float32)
     x_test = torch.tensor(x_test, dtype = torch.float32) 
     y_train = torch.tensor(y_train, dtype = torch.float32)
@@ -97,10 +97,11 @@ def main():
     d = x_train.shape[1]
     act_func = ['relu']
 #    act_func = ['identity', 'sigmoid', 'tanh', 'relu']
-    Sl = [d, 10, 2]
+    Sl = [d, 100, 50, 2]
     for func in act_func:
         print("{} activation function:".format(func))
         print(Sl)
         RunNN(len(Sl), Sl, x_train, y_train, x_test, y_test, func)
         
-main()
+if __name__ == '__main__':
+    main()

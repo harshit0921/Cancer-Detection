@@ -19,6 +19,7 @@ script_location = os.path.dirname(__file__)
 batch_file_directory = os.path.join(script_location, 'batches')
 skin_data_directory = os.path.join(script_location, 'Skin_Data')
 breast_data_directory = os.path.join(script_location, 'Breast_Data')
+cnn_data_directory = os.path.join(script_location, 'Skin_Data_CNN')
 
 
 def merge_skin(batches):
@@ -41,7 +42,7 @@ def merge_skin(batches):
         x= np.append(x,x1, axis =0)
         y= np.append(y,y1, axis =0)
      
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=1/5.0, random_state=100)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=1/5.0, random_state=10)
     y_train = y_train.flatten()
     y_test = y_test.flatten()
    
@@ -72,19 +73,22 @@ def merge_skin(batches):
 
     total = t1-t0
     print('Time taken for merge = {} mins'.format(total/60))
-    return x_train, x_test, y_train, y_test
 
 
-def get_data_skin():
-    data = pd.read_csv(os.path.join(skin_data_directory, 'x_train.csv'))
+def get_data_skin(data = None):
+    if data == 'cnn':
+        directory = cnn_data_directory
+    else:
+        directory = skin_data_directory
+    data = pd.read_csv(os.path.join(directory, 'x_train.csv'))
     l = [i for i in range(data.values.shape[1])]
-    x_train = pd.read_csv(os.path.join(skin_data_directory, 'x_train.csv'), names =l)
+    x_train = pd.read_csv(os.path.join(directory, 'x_train.csv'), names =l)
     x_train = x_train.loc[:,:].values
-    x_test = pd.read_csv(os.path.join(skin_data_directory, 'x_test.csv'), names =l)
+    x_test = pd.read_csv(os.path.join(directory, 'x_test.csv'), names =l)
     x_test = x_test.loc[:,:].values
-    y_train = pd.read_csv(os.path.join(skin_data_directory, 'y_train.csv'), names =['Label'])
+    y_train = pd.read_csv(os.path.join(directory, 'y_train.csv'), names =['Label'])
     y_train = y_train.loc[:,:].values
-    y_test = pd.read_csv(os.path.join(skin_data_directory, 'y_test.csv'), names =['Label'])
+    y_test = pd.read_csv(os.path.join(directory, 'y_test.csv'), names =['Label'])
     y_test = y_test.loc[:,:].values
     
     y_train = y_train.flatten()
@@ -98,7 +102,7 @@ def create_breast_data():
     x = data.values[:, :-1]
     y = data.values[:, -1]
      
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=1/5.0, random_state=100)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=1/5.0, random_state=10)
     y_train = y_train.flatten()
     y_test = y_test.flatten()
    
@@ -116,3 +120,6 @@ def create_breast_data():
     np.savetxt(os.path.join(breast_data_directory, 'y_test.csv'), y_test, delimiter = ",")    
     
     return x_train, x_test, y_train, y_test
+
+if __name__ =='__main__':
+    merge_skin(10)
