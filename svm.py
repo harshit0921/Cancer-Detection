@@ -8,8 +8,8 @@ Created on Mon Apr 22 03:14:54 2019
 import numpy as np
 
 class SVM:
-    # init the structure with parameters
     def __init__(self, x_train, y_train, C, tolerance):
+        print("Training data in SVM")
         self.Xtrain = np.mat(x_train)
         self.ytrain = np.mat(y_train).T
         self.C = C
@@ -21,9 +21,10 @@ class SVM:
         self.w = np.mat(np.zeros(self.n)).T
         self.e_cache = np.mat(np.zeros(self.m)).T
         self.K = np.matmul(self.Xtrain, self.Xtrain.T)
+        self.main_routine(5)
     
     
-    def take_step(self, i1, i2):
+    def step(self, i1, i2):
         alpha1 = self.alphas[i1]
         y1 = self.ytrain[i1]
         if alpha1 > 0 and alpha1 < self.C:
@@ -80,7 +81,7 @@ class SVM:
                 self.e_cache[i] = self.Xtrain[i] * self.w + self.b - self.ytrain[i]
         return 1
     
-    def examine_example(self, i2):
+    def check_sample(self, i2):
         y2 = self.ytrain[i2]
         alpha2 = self.alphas[i2]
         if alpha2 > 0 and alpha2 <self.C:
@@ -90,7 +91,6 @@ class SVM:
             self.e_cache[i2] = E2
         r2 = E2 * y2
         if((r2 < -self.tol) and (self.alphas[i2] < self.C)) or ((r2 > self.tol) and (self.alphas[i2] > 0)):
-            # heuristic 1: find the max deltaE
             max_delta_E = 0
             i1 = -1
             for i in range(self.m):
@@ -103,22 +103,20 @@ class SVM:
                         max_delta_E = delta_E
                         i1 = i
             if i1 >= 0:
-                if self.take_step(i1, i2):
+                if self.step(i1, i2):
                     return 1
-            # heuristic 2: find the suitable i1 on border at random
             random_index = np.random.permutation(self.m)
             for i in random_index:
                 if self.alphas[i] > 0 and self.alphas[i] < self.C:
                     if i == i2:
                         continue
-                    if self.take_step(i, i2):
+                    if self.step(i, i2):
                         return 1
-            # heuristic 3: find the suitable i1 at random on all alphas
             random_index = np.random.permutation(self.m)
             for i in random_index:
                 if i == i2:
                     continue
-                if self.take_step(i1, i2):
+                if self.step(i1, i2):
                     return 1
         return 0
     
@@ -129,21 +127,18 @@ class SVM:
         while(passes < max_iter):
             num_changed = 0
             if (examine_all == 1):
-                # loop over all training examples
                 for i in range(self.m):
-                    num_changed += self.examine_example(i)
+                    num_changed += self.check_sample(i)
             else:
                 for i in range(self.m):
                     if (self.alphas[i] > 0) and (self.alphas[i] < self.C):
-                        num_changed += self.examine_example(i)
+                        num_changed += self.check_sample(i)
             if (num_changed == 0):
                 passes += 1
             if (examine_all == 1):
                 examine_all = 0
             elif (num_changed == 0):
                 examine_all = 1
-            
-            print("Num Changed: {}, Pass: {}, Examine All: {}".format(num_changed, passes, examine_all))
             if(num_changed == 0 and examine_all == 0):
                 break
     
