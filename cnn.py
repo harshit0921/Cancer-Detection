@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Apr 21 19:51:17 2019
-
-@author: shivamodeka
-"""
-
 import tensorflow as tf
 from merge_data import get_data_skin
 import numpy as np
