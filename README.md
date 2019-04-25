@@ -5,7 +5,7 @@ Datasets:
 2. SKIN_CANCER_metadata.csv - Contains image names and corresponding labels for the 10000 images.
 3. SKIN_CANCER_metadata_mini.csv - Contains filtered data for skin cancer.
 4. Skin_Data.zip - Split dataset into training and testing data after preprocessing.
-5. Skin_Data_CNN.zip - Split dataset into training and testing data without preprocessing.
+5. Skin_Data_CNN.zip - Split dataset into training and testing data without preprocessing for cnn.
 6. breast_cancer_data.csv - Contains the features of the breast tumour cell and the corresponding label.
 
 Files:
