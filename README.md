@@ -20,7 +20,14 @@ Files:
 9. testing.py - Runs the models provided in the main function and displays accuracy, confusion matrix and ROC curve for each model.
 10. Plots - Contains the generated confusion matrix and ROC curves for each model.
 
+Libraries Required:
+1. pytorch
+2. tensorflow
+
+Preferred python version - 3.6
+
 How to Run:
 1. Download the repository in a folder.
 2. Extract all the .zip files.
-
+3. Open testing.py and uncomment the model you wish to run in main function.
+4. Run testing.py
