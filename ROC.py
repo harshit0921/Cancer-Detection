@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Apr 22 22:40:25 2019
-
-@author: Harshit Gupta
-"""
-
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve  
 from sklearn.metrics import roc_auc_score 
