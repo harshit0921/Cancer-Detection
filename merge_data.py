@@ -111,7 +111,7 @@ def create_breast_data():
     x = data.values[:, :-1]
     y = data.values[:, -1]
      
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=1/5.0, random_state=10)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=1/5.0, random_state=100)
     y_train = y_train.flatten()
     y_test = y_test.flatten()
    
