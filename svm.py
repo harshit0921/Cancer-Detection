@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Apr 22 03:14:54 2019
-
-@author: Harshit Gupta
-"""
-
 import numpy as np
 
 class SVM:
