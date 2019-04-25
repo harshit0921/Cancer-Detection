@@ -48,3 +48,4 @@ for j in range(batches):
 
 
 merge_skin_data(batches)
+merge_skin_data(batches, model = 'cnn')
